@@ -13,10 +13,16 @@ df = None
 
 def draw_line_plot():
     # Draw line plot
-
-
-
-
+    fig = df.plot(
+    title = 'Daily freeCodeCamp Forum Page Views 5/2016-12/2019',
+    xlabel = 'Date',
+    ylabel = 'Page Views',
+    
+    figsize=(15,8),     # making wide graph
+    kind = 'line',      # deploy a line graph
+    legend = False,     # don't show legend box
+    color = 'red'       # red line color
+    )
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
