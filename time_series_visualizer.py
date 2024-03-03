@@ -39,16 +39,21 @@ def draw_bar_plot():
     # Copy and modify data for monthly bar plot
     df_bar = pd.DataFrame(
         data = {
-            'value' : df['value'],
-            'year' : df.index.year,
-            'month' : df.index.month_name(),
+            'value' : df['value'],              # getting the value from the df
+            'year' : df.index.year,             # geting the year
+            'month' : df.index.month_name(),    # used for getting the name representation of the month
         },
         index = df.index
     )
 
-    df_bar = df_bar.pivot_table(index='year', columns='month', values='value', aggfunc='mean')
+    df_bar = df_bar.pivot_table(        # Re-shaping the data in more appropriate way
+        index='year',                          
+        columns='month',                        # make the 'month' value become a column
+        values='value',                         # make the value of corresponding month
+        aggfunc='mean'                          # apply mean() function in every month
+    )
 
-    df_bar = df_bar[
+    df_bar = df_bar[                    # Make it in ordered
         ['January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December']
     ]
@@ -74,18 +79,18 @@ def draw_bar_plot():
 
 def draw_box_plot():
     # Prepare data for box plots (this part is done!)
-    df_box = df.copy()
-    df_box.reset_index(inplace=True)
-    df_box['year'] = [d.year for d in df_box.date]
-    df_box['month'] = [d.strftime('%b') for d in df_box.date]
+    df_box = df.copy()                                                              # Copying the df
+    df_box.reset_index(inplace=True)                                                # then, reset index
+    df_box['year'] = [date.year for date in df_box['date']]                         # new column, has year of the df
+    df_box['month'] = [date.strftime('%b') for date in df_box['date']]              # new column, has abb. month of the df
 
     order = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+             'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']      # Order of the month in abb. format
 
     # Draw box plots (using Seaborn)
-    fig, (plot1, plot2) = plt.subplots(1, 2, figsize=(20, 5))
-    plot1 = sns.boxplot(data=df_box, x='year', y='value', ax=plot1)
-    plot2 = sns.boxplot(data=df_box, x='month', y='value', ax=plot2, order=order);
+    fig, (plot1, plot2) = plt.subplots(1, 2, figsize=(20, 5))                       # Initialize plot 1 and plot 2
+    plot1 = sns.boxplot(data=df_box, x='year', y='value', ax=plot1)                 # Create plot 1 (year)
+    plot2 = sns.boxplot(data=df_box, x='month', y='value', ax=plot2, order=order);  # Create plot 2 (months)
 
     plot1.set_title('Year-wise Box Plot (Trend)')
     plot1.set_xlabel('Year')
